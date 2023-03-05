@@ -60,6 +60,9 @@ export default async function handler(
       payment_intent_data: {
         metadata
       },
+      phone_number_collection: {
+        enabled: true,
+      },
       success_url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}`,
     });
