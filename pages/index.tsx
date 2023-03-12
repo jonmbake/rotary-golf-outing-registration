@@ -19,18 +19,7 @@ export default function Home() {
       </Head>
       <div className="container">
         <main>
-          <Hero>
-            <p className="lead">
-              <b>
-                Monday, June 19, 2023; Pleasant View Golf Course, Middleton,
-                Wisconsin; 9:00 am shotgun start.
-              </b>{" "}
-              Have some fun and at the same time support the Madison West
-              Middleton Rotary Foundation, Inc. (a 501 c 3 Charitable
-              Organization). All proceeds from the Annual Golf Outing fund our
-              local and international projects and programs.
-            </p>
-          </Hero>
+          <Hero subtitle="Golf and Sponsorship Registration"/>
           <Selections />
         </main>
       </div>

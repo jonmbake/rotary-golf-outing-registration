@@ -38,9 +38,7 @@ export default function Checkout() {
     </Head>
     <div className="container">
       <main>
-        <Hero>
-          <h2>Golfer Information</h2>
-        </Hero>
+        <Hero subtitle='Golf Registration - Golfer Information'/>
         <Link href={ process.env.NEXT_PUBLIC_DOMAIN_NAME || '/' } className='mb-3'>&lt;- Back</Link>
         <form action={ process.env.NEXT_PUBLIC_DOMAIN_NAME + '/api/checkout' } method="post">
           <input type="hidden" name="products" value={JSON.stringify(normalizeForCheckout(selectedProducts))} />

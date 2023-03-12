@@ -21,9 +21,7 @@ export default function Success() {
       </Head>
       <div className="container">
         <main>
-          <Hero>
-          <h2>Thank you!</h2>
-          </Hero>
+          <Hero subtitle="Thank you!"/>
           <p>We look forward to seeing you at the 2023 Madison West Middleton Rotary Golf Outing!</p>
         </main>
       </div>

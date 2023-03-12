@@ -1,10 +1,11 @@
 import Image from 'next/image'
 
 interface Props {
-  children: JSX.Element
+  children?: JSX.Element
+  subtitle: string
 }
 
-export default function Hero({ children }: Props) {
+export default function Hero({ children, subtitle }: Props) {
   return (
     <div className="py-5 text-center">
       <Image
@@ -15,7 +16,7 @@ export default function Hero({ children }: Props) {
         height={75}
         priority
       />
-      <h1>Madison West Middleton Rotary 2023 Golf Outing <br/> Golf and Sponsorship Registration</h1>
+      <h1>Madison West Middleton Rotary 2023 Golf Outing <br/> {subtitle}</h1>
       { children}
     </div>
   )

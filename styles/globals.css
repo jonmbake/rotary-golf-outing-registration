@@ -10,18 +10,6 @@ body {
   margin-bottom: .75rem;
 }
 
-button:hover:after {
-  position: absolute;
-  top: 0;
-  left: 75%;
-  width: 100%;
-  content: attr(title);
-  background-color: #ffa;
-  color: #000;
-  line-height: 1.4em;
-  border: 1px solid #000;
-}
-
 .disabled-link {
   pointer-events: none;
 }

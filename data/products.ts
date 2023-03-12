@@ -19,19 +19,11 @@ const products : Array<Product> = [
   },
   {
     id: 'sponsorship_hole',
-    displayName: 'Company Sponsorship - Hole',
+    displayName: 'Corporate Sponsorship - Hole',
     description: 'Become a corporate hole sponsor for the 2023 Golf Outing.',
     isDisabled: (products: Array<Product>) => products.findIndex(p => p.id === 'sponsorship_hole') !== -1,
     priceQuantity: 1,
     price: 300
-  },
-  {
-    id: 'sponsorship_cart',
-    displayName: 'Company Sponsorship - Cart',
-    description: 'Become a corporate cart sponsor for the 2023 Golf Outing.',
-    isDisabled: (products: Array<Product>) => products.findIndex(p => p.id === 'sponsorship_cart') !== -1,
-    priceQuantity: 1,
-    price: 1000
   },
   {
     id: 'donation',
