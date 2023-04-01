@@ -5,7 +5,7 @@ const products : Array<Product> = [
     id: 'golf_team',
     displayName: 'Golf Registration - Team',
     description: 'Register as a foursome golf team for the 2023 Golf Outing.',
-    isDisabled: (products: Array<Product>) => products.findIndex(p => p.id.startsWith('golf')) !== -1,
+    isDisabled: (products: Array<Product>) => false,
     priceQuantity: 4,
     price: 520
   },
@@ -13,7 +13,7 @@ const products : Array<Product> = [
     id: 'golf_individual',
     displayName: 'Golf Registration - Individual',
     description: 'Register one or more individual golfers for the 2023 Golf Outing.',
-    isDisabled: (products: Array<Product>) => products.findIndex(p => p.id.startsWith('golf_team')) !== -1 || products.filter(p => p.id === 'golf_individual').length >= 4,
+    isDisabled: (products: Array<Product>) => false,
     priceQuantity: 1,
     price: 130
   },
@@ -38,7 +38,11 @@ const products : Array<Product> = [
 export function normalizeForCheckout (products: Array<Product>) {
   return products.reduce((acc: { [key: string]: number }, product: Product) => {
     if (product.id === 'golf_team') {
-      acc['golf_individual'] = 4;
+      if (acc['golf_individual']) {
+        acc['golf_individual'] += 4;
+      } else {
+        acc['golf_individual'] = 4;
+      }
     } else if (product.id === 'donation') {
       acc[product.id] = product.price;
     } else if (acc[product.id] == null) {

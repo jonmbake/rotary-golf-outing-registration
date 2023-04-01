@@ -9,13 +9,6 @@ import { useEffect, useState } from 'react';
 export default function Checkout() {
   const [selectedProducts, setSelectedProducts] = useState<Array<Product>>([]);
 
-  function getGolferCount () : number {
-    if (selectedProducts.find((product: Product) => product.id === 'golf_team') != null) {
-      return 4;
-    }
-    return selectedProducts.filter((product: Product) => product.id === 'golf_individual').length;
-  }
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const s = window.sessionStorage.getItem('selections');
@@ -24,6 +17,8 @@ export default function Checkout() {
       }
     }
   }, []);
+
+  const checkoutProducts = normalizeForCheckout(selectedProducts);
 
   return (
     <>
@@ -41,8 +36,8 @@ export default function Checkout() {
         <Hero subtitle='Golf Registration - Golfer Information'/>
         <Link href={ process.env.NEXT_PUBLIC_DOMAIN_NAME || '/' } className='mb-3'>&lt;- Back</Link>
         <form action={ process.env.NEXT_PUBLIC_DOMAIN_NAME + '/api/checkout' } method="post">
-          <input type="hidden" name="products" value={JSON.stringify(normalizeForCheckout(selectedProducts))} />
-          <GolferInfo numberOfGolfers={ getGolferCount() }/>
+          <input type="hidden" name="products" value={JSON.stringify(checkoutProducts)} />
+          <GolferInfo numberOfGolfers={ checkoutProducts['golf_individual'] }/>
           <button type="submit" className="w-100 btn btn-primary btn-lg">Submit</button>
           <div className="form-text mb-5 text-start mb-5">Next step: Review and Pay</div>
         </form>

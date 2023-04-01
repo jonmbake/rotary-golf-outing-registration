@@ -13,3 +13,8 @@ body {
 .disabled-link {
   pointer-events: none;
 }
+
+.team-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+}
