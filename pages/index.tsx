@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Hero from "@/components/Hero";
 import Selections from "@/components/ProductsSelections";
+import ContactInfo from "@/components/ContactInfo";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +20,13 @@ export default function Home() {
       </Head>
       <div className="container">
         <main>
-          <Hero subtitle="Golf and Sponsorship Registration"/>
+          <Hero subtitle="Golf and Sponsorship Registration">
+          <p className="lead">
+            Come join us for some golfing fun on Monday, June 19, 2023, at Pleasant View Golf Course.
+          </p>
+          </Hero>
           <Selections />
+          <ContactInfo />
         </main>
       </div>
     </>

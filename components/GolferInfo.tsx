@@ -6,7 +6,7 @@ export default function GolferInfo({ numberOfGolfers }: Props) {
   return (
     <>
       <div className="alert alert-info" role="alert">
-      Please provide the golfers&apos; names and emails if known at the time of registration. If the golfers are not known, leave the fields blank, and we will follow up for golfer details closer to the golf outing time.
+      Please provide golfers&apos; names and emails if known now, at time of registration. If golfers are not yet known, leave the name and email fields blank, and we will follow up for golfer details closer to the golf outing time.
       </div>
       {Array(numberOfGolfers).fill(1).map((_, index) => {
         return (

@@ -1,3 +1,4 @@
+import ContactInfo from '@/components/ContactInfo';
 import GolferInfo from '@/components/GolferInfo';
 import Hero from '@/components/Hero';
 import { normalizeForCheckout } from '@/data/products';
@@ -41,6 +42,7 @@ export default function Checkout() {
           <button type="submit" className="w-100 btn btn-primary btn-lg">Submit</button>
           <div className="form-text mb-5 text-start mb-5">Next step: Review and Pay</div>
         </form>
+        <ContactInfo />
       </main>
     </div>
   </>
