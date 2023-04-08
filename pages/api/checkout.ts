@@ -63,6 +63,9 @@ export default async function handler(
       phone_number_collection: {
         enabled: true,
       },
+      invoice_creation: {
+        enabled: true
+      },
       success_url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}`,
     });
