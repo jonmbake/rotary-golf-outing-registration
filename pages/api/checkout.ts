@@ -54,6 +54,16 @@ export default async function handler(
     const metadata = Object.keys(req.body)
       .filter(key => key.startsWith('golfer'))
       .reduce((cur, key) => { return Object.assign(cur, { [key]: req.body[key] })}, {});
+    const customFields: Array<Stripe.Checkout.SessionCreateParams.CustomField> = [];
+    if (Object.keys(JSON.parse(req.body.products)).find(key => key.startsWith('sponsorship'))) {
+      customFields.push(
+        {
+          key: 'companyname',
+          label: {type: 'custom', custom: 'Sponsorship Company Name'},
+          type: 'text',
+        },
+      );
+    }
     const session = await stripe.checkout.sessions.create({
       line_items: buildLineItems(req.body),
       mode: 'payment',
@@ -68,6 +78,7 @@ export default async function handler(
       },
       success_url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}`,
+      custom_fields: customFields,
     });
     if (session.url == null) {
       res.status(500);
