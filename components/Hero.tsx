@@ -16,7 +16,7 @@ export default function Hero({ children, subtitle }: Props) {
         height={75}
         priority
       />
-      <h1>Madison West Middleton Rotary 2023 Golf Outing <br/> {subtitle}</h1>
+      <h1>Madison West Middleton Rotary {process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing <br/> {subtitle}</h1>
       { children }
     </div>
   )
