@@ -4,7 +4,7 @@ const products : Array<Product> = [
   {
     id: 'golf_team',
     displayName: 'Golf Registration - Team',
-    description: 'Register as a foursome golf team for the 2023 Golf Outing.',
+    description: `Register as a foursome golf team for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing. Includes 18 holes, a cart, a box lunch, and a cookout dinner.`,
     isDisabled: (products: Array<Product>) => false,
     priceQuantity: 4,
     price: 520
@@ -12,23 +12,39 @@ const products : Array<Product> = [
   {
     id: 'golf_individual',
     displayName: 'Golf Registration - Individual',
-    description: 'Register one or more individual golfers for the 2023 Golf Outing.',
+    description: `Register one or more individual golfers for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing. Includes 18 holes, a cart, a box lunch, and a cookout dinner.`,
     isDisabled: (products: Array<Product>) => false,
     priceQuantity: 1,
     price: 130
   },
   {
+    id: 'dinner',
+    displayName: 'Golf Outing - Dinner Only',
+    description: `Register for the cookout dinnner at the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
+    isDisabled: (products: Array<Product>) => false,
+    priceQuantity: 1,
+    price: 30
+  },
+  {
     id: 'sponsorship_hole',
     displayName: 'Corporate Sponsorship - Hole',
-    description: 'Become a corporate hole sponsor for the 2023 Golf Outing.',
+    description: `Become a corporate hole sponsor for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
     isDisabled: (products: Array<Product>) => products.findIndex(p => p.id === 'sponsorship_hole') !== -1,
     priceQuantity: 1,
     price: 300
   },
   {
+    id: 'sponsorship_other',
+    displayName: 'Corporate Sponsorship - Other',
+    description: `Become a corporate sponsor for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
+    isDisabled: (products: Array<Product>) => true,
+    priceQuantity: 1,
+    price: 0
+  },
+  {
     id: 'donation',
     displayName: 'Golf Outing - Donation',
-    description: 'Not golfing, but still want to support the cause? Donate to the 2023 Golf Outing.',
+    description: `Not golfing, but still want to support the cause? Donate to the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
     isDisabled: (products: Array<Product>) => products.findIndex(p => p.id === 'donation') !== -1,
     priceQuantity: 1,
     price: 50
