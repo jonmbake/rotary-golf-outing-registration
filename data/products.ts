@@ -28,7 +28,7 @@ const products : Array<Product> = [
   {
     id: 'sponsorship_hole',
     displayName: 'Corporate Sponsorship - Hole',
-    description: `Become a corporate hole sponsor for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
+    description: `Become a corporate sponsor for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing by sponsoring a hole.`,
     isDisabled: (products: Array<Product>) => products.findIndex(p => p.id === 'sponsorship_hole') !== -1,
     priceQuantity: 1,
     price: 300
