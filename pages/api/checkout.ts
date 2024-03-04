@@ -30,6 +30,12 @@ function buildLineItems (reqBody: any) : Array<Stripe.Checkout.SessionCreatePara
           quantity: 1
         });
         break;
+      case 'dinner':
+        lineItems.push({
+          price: process.env.PRICE_ID_DINNER,
+          quantity: 1
+        });
+        break;
       case 'donation':
         lineItems.push({
           price_data: {
