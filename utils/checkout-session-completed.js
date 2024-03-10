@@ -26,6 +26,8 @@ async function handleCheckoutSessionCompleted(session) {
               itemsPurchased.push("Donation");
           } else if (product.name.includes("Hole")) {
               itemsPurchased.push("Hole Sponsor");
+            } else if (product.name.includes("Dinner")) {
+              itemsPurchased.push("Dinner/Lunch");
           }
       }
 
