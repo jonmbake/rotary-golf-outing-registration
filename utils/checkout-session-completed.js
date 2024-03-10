@@ -12,15 +12,16 @@ async function handleCheckoutSessionCompleted(session) {
       let itemsPurchased = [];
       let donationAmount;
       let golferMetadata = [];
-      let golferCount = 0;
 
       // Process each line item and prepare data for Airtable
       for (const item of lineItems.data) {
           const product = await stripe.products.retrieve(item.price.product);
 
           if (product.name.includes("Golfer Registration")) {
-              golferCount++; // Increment golfer count for each Golfer Registration found
-              golferMetadata.push(...extractGolferMetadata(paymentIntent.metadata));
+              const golferMetadata = extractGolferMetadata(paymentIntent.metadata);
+              const golferCount = golferMetadata.length;
+              itemsPurchased.push(`${golferCount} Golfer${golferCount > 1 ? 's' : ''}`);
+              golferMetadata.push(...golferMetadata);
           } else if (product.name.includes("Donation")) {
               donationAmount = item.amount_total / 100; // assuming amount_total is in cents
               itemsPurchased.push("Donation");
@@ -31,11 +32,6 @@ async function handleCheckoutSessionCompleted(session) {
           }
       }
 
-      // Update itemsPurchased based on the golfer count
-      if (golferCount > 0) {
-          itemsPurchased.push(`${golferCount} Golfer${golferCount > 1 ? 's' : ''}`);
-      }
-
       let insertedGolfers = [];
       // Insert into Golfers Airtable if necessary
       if (golferMetadata.length !== 0) {
@@ -43,7 +39,7 @@ async function handleCheckoutSessionCompleted(session) {
         for (const [index, golfer] of golferMetadata.entries()) {
           golfTeamNumber = index % 4 === 0 ? ++golfTeamNumber : golfTeamNumber;
           insertedGolfers.push(await base('Golfers').create({
-              'Golfer Name': golfer.name,
+              'Golfer Name': golfer.name || 'TBD',
               'Team #': golfTeamNumber,
               'Golfer Email': golfer.email,
               'Paid': 'Yes'
