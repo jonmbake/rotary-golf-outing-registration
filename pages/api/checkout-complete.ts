@@ -1,21 +1,40 @@
 import Stripe from 'stripe';
-import Airtable from 'airtable';
 import { NextApiRequest, NextApiResponse } from 'next';
 import handleCheckoutSessionCompleted from '../../utils/checkout-session-completed';
+import { Readable } from 'stream';
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY || '', {apiVersion: '2023-10-16'});
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID || '');
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+async function buffer(readable: Readable) {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{}>
 ) {
+  if (req.method !== 'POST') {
+    res.status(405);
+    return;
+  }
+
   const sig = req.headers['stripe-signature'] || '';
 
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SIGNING_SECRET || '');
+    const buf = await buffer(req);
+    event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SIGNING_SECRET || '');
   } catch (err) {
     console.error('Error while attempting to construct webhook', err)
     res.status(400);
