@@ -1,3 +1,9 @@
+import Stripe from 'stripe';
+import Airtable from 'airtable';
+
+const stripe = new Stripe(process.env.STRIPE_API_KEY || '', {apiVersion: '2023-10-16'});
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID || '');
+
 async function handleCheckoutSessionCompleted(session) {
   try {
       // Retrieve the line items for the given Checkout Session
