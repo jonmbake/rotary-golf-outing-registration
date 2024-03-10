@@ -18,10 +18,9 @@ async function handleCheckoutSessionCompleted(session) {
           const product = await stripe.products.retrieve(item.price.product);
 
           if (product.name.includes("Golfer Registration")) {
-              const golferMetadata = extractGolferMetadata(paymentIntent.metadata);
+              golferMetadata = extractGolferMetadata(paymentIntent.metadata);
               const golferCount = golferMetadata.length;
               itemsPurchased.push(`${golferCount} Golfer${golferCount > 1 ? 's' : ''}`);
-              golferMetadata.push(...golferMetadata);
           } else if (product.name.includes("Donation")) {
               donationAmount = item.amount_total / 100; // assuming amount_total is in cents
               itemsPurchased.push("Donation");
