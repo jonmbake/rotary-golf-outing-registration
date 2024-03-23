@@ -79,7 +79,7 @@ function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams
       price_data: {
         currency: 'USD',
         product: process.env.PRODUCT_ID_CREDIT_CARD_PROCESSING_FEES!,
-        unit_amount: Math.round(lineItemAmount * 2.9 + 30)
+        unit_amount: Math.round(lineItemAmount * 2.9 / 0.971 + 30)
       },
       quantity: 1
     });

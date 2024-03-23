@@ -13,7 +13,7 @@ const FeeCoverModal: React.FC<FeeCoverModalProps> = ({ show, selectedProducts, o
     return null;
   }
 
-  const feeAmount = Math.round(selectedProducts.reduce((prev, curr) => prev + curr.price, 0) * 2.9 + 30) / 100;
+  const feeAmount = Math.round(selectedProducts.reduce((prev, curr) => prev + curr.price, 0) * 2.9 / 0.971 + 30) / 100;
 
   return (
     <>
@@ -26,7 +26,7 @@ const FeeCoverModal: React.FC<FeeCoverModalProps> = ({ show, selectedProducts, o
             </button>
           </div>
           <div className="modal-body text-start">
-            <p>Would you like to cover the credit card processing fee of <span className='fw-bold'>${feeAmount}</span> so that 100% of your registration fee goes towards supporting the Rotary Club&apos;s initiatives?</p>
+            <p>Would you like to cover the credit card processing fee of <span className='fw-bold'>${feeAmount}</span> so that 100% of your registration fee goes towards supporting our Rotary Club&apos;s initiatives?</p>
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={() => onConfirm(false)}>
