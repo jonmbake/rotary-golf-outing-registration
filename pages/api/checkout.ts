@@ -21,6 +21,7 @@ const productSchema = Joi.object({
 // Define a schema for the request body validation
 const requestBodySchema = Joi.object({
   products: Joi.string().required(),
+  cover_cc_fees: Joi.boolean().required(),
   // Allow any keys starting with 'golfer'
 }).pattern(/^golfer\d+_(name|email)$/, Joi.string().allow(''));
 
@@ -28,6 +29,7 @@ function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams
   const lineItems: Array<Stripe.Checkout.SessionCreateParams.LineItem> = [];
   const products = JSON.parse(reqBody.products);
 
+  let lineItemAmount = 0;
   for (const [key, value] of Object.entries<number>(products)) {
     switch (key) {
       case 'golf_individual':
@@ -35,24 +37,28 @@ function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams
           price: process.env.PRICE_ID_GOLFER_REGISTRATION!,
           quantity: value
         });
+        lineItemAmount += 130 * value;
         break;
       case 'sponsorship_hole':
         lineItems.push({
           price: process.env.PRICE_ID_SPONSORSHIP_HOLE!,
           quantity: 1
         });
+        lineItemAmount += 300;
         break;
       case 'sponsorship_cart':
         lineItems.push({
           price: process.env.PRICE_ID_SPONSORSHIP_CART!,
           quantity: 1
         });
+        lineItemAmount += 1000;
         break;
       case 'dinner':
         lineItems.push({
           price: process.env.PRICE_ID_DINNER!,
           quantity: 1
         });
+        lineItemAmount += 30;
         break;
       case 'donation':
         lineItems.push({
@@ -63,8 +69,20 @@ function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams
           },
           quantity: 1
         });
+        lineItemAmount += value;
         break;
     }
+  }
+
+  if (reqBody.cover_cc_fees) {
+    lineItems.push({
+      price_data: {
+        currency: 'USD',
+        product: process.env.PRODUCT_ID_CREDIT_CARD_PROCESSING_FEES!,
+        unit_amount: Math.round(lineItemAmount * 2.9 + 30)
+      },
+      quantity: 1
+    });
   }
 
   return lineItems;
