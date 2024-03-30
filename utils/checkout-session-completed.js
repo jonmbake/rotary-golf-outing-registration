@@ -12,6 +12,7 @@ async function handleCheckoutSessionCompleted(session) {
       let itemsPurchased = [];
       let donationAmount;
       let ccFeeAmount;
+      let sponsorIncome;
       let golferMetadata = [];
 
       // Process each line item and prepare data for Airtable
@@ -27,6 +28,7 @@ async function handleCheckoutSessionCompleted(session) {
               itemsPurchased.push("Donation");
           } else if (product.name.includes("Hole")) {
               itemsPurchased.push("Hole Sponsor");
+              sponsorIncome = 150;
           } else if (product.name.includes("Dinner")) {
             itemsPurchased.push("Dinner/Lunch");
           } else if (product.name.includes("Processing Fees")) {
@@ -58,6 +60,7 @@ async function handleCheckoutSessionCompleted(session) {
           'Items Purchased': itemsPurchased,
           'Donation Amount': donationAmount,
           'Credit Card Fees Paid': ccFeeAmount,
+          'Sponsor Income': sponsorIncome,
           'Golfers': insertedGolfers.map(g => g.id),
           'Payer Email': session.customer_details.email,
           'Payer Phone': session.customer_details.phone,
