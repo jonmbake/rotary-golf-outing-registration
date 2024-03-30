@@ -11,6 +11,7 @@ async function handleCheckoutSessionCompleted(session) {
       const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent);
       let itemsPurchased = [];
       let donationAmount;
+      let ccFeeAmount;
       let golferMetadata = [];
 
       // Process each line item and prepare data for Airtable
@@ -30,6 +31,7 @@ async function handleCheckoutSessionCompleted(session) {
             itemsPurchased.push("Dinner/Lunch");
           } else if (product.name.includes("Processing Fees")) {
             itemsPurchased.push("Credit Card Fees");
+            ccFeeAmount = item.amount_total / 100;
           }
       }
 
@@ -55,6 +57,7 @@ async function handleCheckoutSessionCompleted(session) {
           'Invoiced Amount': session.amount_total / 100,
           'Items Purchased': itemsPurchased,
           'Donation Amount': donationAmount,
+          'Credit Card Fees Paid': ccFeeAmount,
           'Golfers': insertedGolfers.map(g => g.id),
           'Payer Email': session.customer_details.email,
           'Payer Phone': session.customer_details.phone,
@@ -95,7 +98,7 @@ async function getMaxTeamNumber() {
     fields: ['Team #']
   }).eachPage((records, fetchNextPage) => {
     records.forEach(record => {
-      const teamNumber = parseInt(record.get('Team Number'), 10);
+      const teamNumber = parseInt(record.get('Team #'), 10);
       if (teamNumber > maxTeamNumber) {
         maxTeamNumber = teamNumber;
       }
