@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>MWM Rotary {process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Registration</title>
+        <title>Annual Madison West Middleton Rotary Golf Outing Registration</title>
         <meta
           name="description"
           content="Register for the Annual Madison West Middleton Rotary Golf Outing."

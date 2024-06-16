@@ -27,10 +27,10 @@ export default function Checkout() {
   return (
     <>
     <Head>
-      <title>MWM Rotary {process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Registration</title>
+      <title>Annual Madison West Middleton Rotary Golf Outing Registration - Checkout</title>
       <meta
         name="description"
-        content="Madison West Middleton Rotary {process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Registration"
+        content="Annual Madison West Middleton Rotary Golf Outing registration checkout."
       />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.png" />

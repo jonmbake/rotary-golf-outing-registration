@@ -11,10 +11,10 @@ export default function Success() {
   return (
     <>
       <Head>
-        <title>MWM Rotary {process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Registration</title>
+        <title>Annual Madison West Middleton Rotary Golf Outing Registration - Success</title>
         <meta
           name="description"
-          content="Madison West Middleton Rotary {process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Registration"
+          content="Successfully registered for the Annual Madison West Middleton Rotary Golf Outing."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
