@@ -37,7 +37,7 @@ function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams
           price: process.env.PRICE_ID_GOLFER_REGISTRATION!,
           quantity: value
         });
-        lineItemAmount += 130 * value;
+        lineItemAmount += 140 * value;
         break;
       case 'sponsorship_hole':
         lineItems.push({

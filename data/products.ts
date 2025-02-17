@@ -7,7 +7,7 @@ const products : Array<Product> = [
     description: `Register as a foursome golf team for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing. Includes 18 holes, a cart, a box lunch, and a cookout dinner.`,
     isDisabled: (products: Array<Product>) => false,
     priceQuantity: 4,
-    price: 520
+    price: 560
   },
   {
     id: 'golf_individual',
@@ -15,7 +15,7 @@ const products : Array<Product> = [
     description: `Register one or more individual golfers for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing. Includes 18 holes, a cart, a box lunch, and a cookout dinner.`,
     isDisabled: (products: Array<Product>) => false,
     priceQuantity: 1,
-    price: 130
+    price: 140
   },
   {
     id: 'dinner',
