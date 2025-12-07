@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "next dev",
@@ -12,18 +12,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "14.0.0",
     "@types/node": "20.8.9",
     "@types/react": "18.2.33",
     "@types/react-dom": "18.2.14",
     "airtable": "^0.12.2",
     "bootstrap": "5.3.3",
-    "eslint": "8.52.0",
-    "eslint-config-next": "14.0.0",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.7",
     "joi": "^17.12.2",
-    "next": "^14.2.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "next": "^16.0.7",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "stripe": "^14.2.0",
     "typescript": "5.2.2"
   }
