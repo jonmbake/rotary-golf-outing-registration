@@ -9,15 +9,14 @@ interface FeeCoverModalProps {
 }
 
 const FeeCoverModal: React.FC<FeeCoverModalProps> = ({ show, selectedProducts, onClose, onConfirm }) => {
+  const feeAmount = React.useMemo(() => {
+    const total = selectedProducts.reduce((prev, curr) => prev + curr.price, 0);
+    return (Math.round(total * 2.9 / 0.971 + 30) / 100).toFixed(2);
+  }, [selectedProducts]);
+
   if (!show) {
     return null;
   }
-
-  const feeAmount = React.useMemo(() => {
-    const totalInCents = selectedProducts.reduce((prev, curr) => prev + curr.price, 0);
-    const feeInCents = Math.round(totalInCents * 0.029 / 0.971) + 30;
-    return (feeInCents / 100).toFixed(2);
-  }, [selectedProducts]);
 
   return (
     <>
