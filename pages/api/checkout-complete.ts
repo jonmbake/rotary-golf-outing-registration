@@ -2,8 +2,9 @@ import Stripe from 'stripe';
 import { NextApiRequest, NextApiResponse } from 'next';
 import handleCheckoutSessionCompleted from '../../utils/checkout-session-completed';
 import { Readable } from 'stream';
+import { validateEnv } from '@/utils/env';
 
-const stripe = new Stripe(process.env.STRIPE_API_KEY || '', {apiVersion: '2023-10-16'});
+const stripe = new Stripe(process.env.STRIPE_API_KEY || '', {apiVersion: '2025-12-15.clover'});
 
 export const config = {
   api: {
@@ -23,6 +24,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{}>
 ) {
+  validateEnv();
+
   if (req.method !== 'POST') {
     res.status(405);
     return;
@@ -45,7 +48,7 @@ export default async function handler(
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
-      await handleCheckoutSessionCompleted(session);
+      await handleCheckoutSessionCompleted(session, event.id);
     } catch (error) {
       console.error('Error handling checkout session completed:', error);
       res.status(500);

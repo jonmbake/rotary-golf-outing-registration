@@ -13,6 +13,7 @@ export default function ProductsSelections() {
   const [selectedProducts, setSelectedProducts] = useState<Array<Product>>([]);
   const [showFeeCoverDialog, setShowFeeCoverDialog] = useState<boolean>(false);
   const [coverFeesSelection, setCoverFeesSelection] = useState<boolean | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
   const addProductSelection = (product: Product) =>
     setSelectedProducts((prev) => {
@@ -41,6 +42,7 @@ export default function ProductsSelections() {
 
   useEffect(() => {
     if (coverFeesSelection != null) {
+      setIsSubmitting(true);
       if (selectedProducts.findIndex(p => p.id.startsWith('golf')) === -1) {
         formRef.current && formRef.current.submit();
       } else {
@@ -50,7 +52,7 @@ export default function ProductsSelections() {
   }, [router, selectedProducts, coverFeesSelection]);
 
   let continueButtonClassNames = "w-100 btn btn-secondary btn-lg ";
-  if (selectedProducts.length === 0) {
+  if (selectedProducts.length === 0 || isSubmitting) {
     continueButtonClassNames += "disabled-link";
   }
   let continueMessage = "";
@@ -79,7 +81,9 @@ export default function ProductsSelections() {
           addProductSelection={addProductSelection}
           selectedProducts={selectedProducts}
         />
-        <button className={continueButtonClassNames} onClick={ () => setShowFeeCoverDialog(true) }>Continue</button>
+        <button className={continueButtonClassNames} disabled={isSubmitting || selectedProducts.length === 0} onClick={ () => setShowFeeCoverDialog(true) }>
+          {isSubmitting ? 'Submitting...' : 'Continue'}
+        </button>
         <div className="form-text mb-5 text-start">{continueMessage}</div>
       </div>
       <FeeCoverModal show={showFeeCoverDialog} selectedProducts={selectedProducts} onClose={() => setShowFeeCoverDialog(false)} onConfirm={coverFees => setCoverFeesSelection(coverFees) } />

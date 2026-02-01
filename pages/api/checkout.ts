@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import Joi from 'joi'; // Using Joi for validation
+import Joi from 'joi';
+import { PRICES } from '@/data/products';
+import { validateEnv } from '@/utils/env';
 
-const stripe = new Stripe(process.env.STRIPE_API_KEY || '', { apiVersion: '2023-10-16' });
+const stripe = new Stripe(process.env.STRIPE_API_KEY || '', { apiVersion: '2025-12-15.clover' });
 
 type Data = {
   name?: string;
@@ -25,7 +27,7 @@ const requestBodySchema = Joi.object({
   // Allow any keys starting with 'golfer'
 }).pattern(/^golfer\d+_(name|email)$/, Joi.string().allow(''));
 
-function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams.LineItem> {
+export function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams.LineItem> {
   const lineItems: Array<Stripe.Checkout.SessionCreateParams.LineItem> = [];
   const products = JSON.parse(reqBody.products);
 
@@ -37,28 +39,28 @@ function buildLineItems(reqBody: any): Array<Stripe.Checkout.SessionCreateParams
           price: process.env.PRICE_ID_GOLFER_REGISTRATION!,
           quantity: value
         });
-        lineItemAmount += 140 * value;
+        lineItemAmount += PRICES.golf_individual * value;
         break;
       case 'sponsorship_hole':
         lineItems.push({
           price: process.env.PRICE_ID_SPONSORSHIP_HOLE!,
           quantity: 1
         });
-        lineItemAmount += 300;
+        lineItemAmount += PRICES.sponsorship_hole;
         break;
       case 'sponsorship_cart':
         lineItems.push({
           price: process.env.PRICE_ID_SPONSORSHIP_CART!,
           quantity: 1
         });
-        lineItemAmount += 1000;
+        lineItemAmount += PRICES.sponsorship_cart;
         break;
       case 'dinner':
         lineItems.push({
           price: process.env.PRICE_ID_DINNER!,
           quantity: 1
         });
-        lineItemAmount += 30;
+        lineItemAmount += PRICES.dinner;
         break;
       case 'donation':
         lineItems.push({
@@ -92,6 +94,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  validateEnv();
+
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
     return;
@@ -106,9 +110,18 @@ export default async function handler(
     }
 
     // Further validate the products data
-    const productValidation = productSchema.validate(JSON.parse(value.products));
+    const products = JSON.parse(value.products);
+    const productValidation = productSchema.validate(products);
     if (productValidation.error) {
       res.status(400).json({ error: productValidation.error.details[0].message });
+      return;
+    }
+
+    // Validate golfer count matches product quantity
+    const expectedGolfers = products.golf_individual || 0;
+    const providedGolfers = Object.keys(req.body).filter(k => /^golfer\d+_name$/.test(k)).length;
+    if (providedGolfers < expectedGolfers) {
+      res.status(400).json({ error: `Expected ${expectedGolfers} golfer names, got ${providedGolfers}` });
       return;
     }
 
@@ -116,7 +129,7 @@ export default async function handler(
       .filter(key => key.startsWith('golfer'))
       .reduce((cur, key) => ({ ...cur, [key]: req.body[key] }), {});
     const customFields: Array<Stripe.Checkout.SessionCreateParams.CustomField> = [];
-    if (Object.keys(JSON.parse(req.body.products)).find(key => key.startsWith('sponsorship'))) {
+    if (Object.keys(products).find(key => key.startsWith('sponsorship'))) {
       customFields.push({
         key: 'companyname',
         label: { type: 'custom', custom: 'Sponsorship Company Name' },

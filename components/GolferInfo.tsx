@@ -17,11 +17,21 @@ export default function GolferInfo({ numberOfGolfers }: Props) {
             <h3>Golfer #{index + 1}</h3>
             <div className="mb-3">
               <label className="form-label">Full Name</label>
-              <input type="text" className="form-control" name={"golfer" + (index + 1) + "_name"} />
+              <input
+                type="text"
+                className="form-control"
+                name={"golfer" + (index + 1) + "_name"}
+                placeholder="Full Name (or leave blank if TBD)"
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Email</label>
-              <input type="email" className="form-control" name={"golfer" + (index + 1) + "_email"} />
+              <input
+                type="email"
+                className="form-control"
+                name={"golfer" + (index + 1) + "_email"}
+                placeholder="email@example.com (optional)"
+              />
               <div className="form-text">Email address will be used to send golf outing updates.</div>
             </div>
           </div>

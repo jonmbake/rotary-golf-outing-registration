@@ -1,5 +1,14 @@
 import Product from "@/types/Products";
 
+export const PRICES: Record<string, number> = {
+  golf_individual: 140,
+  golf_team: 560,
+  sponsorship_hole: 300,
+  sponsorship_cart: 1000,
+  dinner: 30,
+  donation: 50,
+};
+
 const products : Array<Product> = [
   {
     id: 'golf_team',
