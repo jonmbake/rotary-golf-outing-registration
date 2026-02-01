@@ -29,7 +29,7 @@ const products : Array<Product> = [
   {
     id: 'dinner',
     displayName: 'Golf Outing - Dinner Only',
-    description: `Register for the cookout dinnner at the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
+    description: `Register for the cookout dinner at the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
     isDisabled: (products: Array<Product>) => false,
     priceQuantity: 1,
     price: 30
