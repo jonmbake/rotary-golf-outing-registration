@@ -13,26 +13,30 @@ const FeeCoverModal: React.FC<FeeCoverModalProps> = ({ show, selectedProducts, o
     return null;
   }
 
-  const feeAmount = Math.round(selectedProducts.reduce((prev, curr) => prev + curr.price, 0) * 2.9 / 0.971 + 30) / 100;
+  const feeAmount = React.useMemo(() => {
+    const totalInCents = selectedProducts.reduce((prev, curr) => prev + curr.price, 0);
+    const feeInCents = Math.round(totalInCents * 0.029 / 0.971) + 30;
+    return (feeInCents / 100).toFixed(2);
+  }, [selectedProducts]);
 
   return (
     <>
-    <div className="modal show d-block" tabIndex={-1} role="dialog">
+    <div className="modal show d-block" tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Cover Credit Card Processing Fees?</h5>
+            <h5 className="modal-title" id="modal-title">Cover Credit Card Processing Fees?</h5>
             <button type="button" className="btn-close" data-dismiss="modal" aria-label="Close" onClick={onClose}>
             </button>
           </div>
           <div className="modal-body text-start">
-            <p>Would you like to cover the credit card processing fee of <span className='fw-bold'>${feeAmount}</span> so that 100% of your registration fee goes towards supporting our Rotary Club&apos;s initiatives?</p>
+            <p>Would you like to cover the credit card processing fee of <span className="fw-bold">${feeAmount}</span> so that 100% of your registration fee goes towards supporting our Rotary Club&apos;s initiatives?</p>
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={() => onConfirm(false)}>
               No
             </button>
-            <button type="button" className="btn btn-primary" onClick={() => onConfirm(true)}>
+            <button type="button" className="btn btn-primary" onClick={() => onConfirm(true)} autoFocus>
               Yes
             </button>
           </div>
