@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "airtable": "npx tsx scripts/add-record.ts"
   },
   "dependencies": {
     "@types/node": "20.8.9",

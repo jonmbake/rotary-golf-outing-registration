@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import Airtable, { FieldSet, Records } from 'airtable';
 import { extractGolferMetadata, GolferMetadata } from './golfer-metadata';
+import { PRICES } from '../data/products';
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY || '', {apiVersion: '2025-12-15.clover'});
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID || '');
@@ -39,7 +40,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
               itemsPurchased.push("Donation");
           } else if (product.name.includes("Hole")) {
               itemsPurchased.push("Hole Sponsor");
-              sponsorIncome = 150;
+              sponsorIncome = PRICES.sponsorship_hole;
           } else if (product.name.includes("Dinner")) {
             itemsPurchased.push("Dinner/Lunch");
           } else if (product.name.includes("Processing Fees")) {
