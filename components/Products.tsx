@@ -6,7 +6,7 @@ interface Props {
   addProductSelection: (product: Product) => void;
   selectedProducts: Array<Product>
 }
-``
+
 export default function Products({ addProductSelection, selectedProducts }: Props) {
   const [donationAmount, setDonationAmount] = useState(50);
 

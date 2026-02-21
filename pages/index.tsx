@@ -1,10 +1,7 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
 import Hero from "@/components/Hero";
 import Selections from "@/components/ProductsSelections";
 import ContactInfo from "@/components/ContactInfo";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   let leadMessage = 'Registration is closed. See you all next year!';

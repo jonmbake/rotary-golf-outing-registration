@@ -5,7 +5,7 @@ import { useEffect } from "react";
 export default function Success() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const s = window.sessionStorage.removeItem('selections');
+      window.sessionStorage.removeItem('selections');
     }
   }, []);
   return (

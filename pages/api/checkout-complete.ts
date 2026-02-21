@@ -23,7 +23,7 @@ async function buffer(readable: Readable) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{}>
+  res: NextApiResponse<void>
 ) {
   validateEnv();
 

@@ -14,7 +14,7 @@ const products : Array<Product> = [
     id: 'golf_team',
     displayName: 'Golf Registration - Team',
     description: `Register as a foursome golf team for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing. Includes 18 holes, a cart, a box lunch, and a cookout dinner.`,
-    isDisabled: (products: Array<Product>) => false,
+    isDisabled: () => false,
     priceQuantity: 4,
     price: 560
   },
@@ -22,7 +22,7 @@ const products : Array<Product> = [
     id: 'golf_individual',
     displayName: 'Golf Registration - Individual',
     description: `Register one or more individual golfers for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing. Includes 18 holes, a cart, a box lunch, and a cookout dinner.`,
-    isDisabled: (products: Array<Product>) => false,
+    isDisabled: () => false,
     priceQuantity: 1,
     price: 140
   },
@@ -30,7 +30,7 @@ const products : Array<Product> = [
     id: 'dinner',
     displayName: 'Golf Outing - Dinner Only',
     description: `Register for the cookout dinner at the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
-    isDisabled: (products: Array<Product>) => false,
+    isDisabled: () => false,
     priceQuantity: 1,
     price: 30
   },
@@ -46,7 +46,7 @@ const products : Array<Product> = [
     id: 'sponsorship_other',
     displayName: 'Corporate Sponsorship - Other',
     description: `Become a corporate sponsor for the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
-    isDisabled: (products: Array<Product>) => true,
+    isDisabled: () => true,
     priceQuantity: 1,
     price: 0
   },
@@ -54,7 +54,7 @@ const products : Array<Product> = [
     id: 'donation',
     displayName: 'Golf Outing - Donation',
     description: `Not golfing, but still want to support the cause? Donate to the ${process.env.NEXT_PUBLIC_GOLF_OUTING_YEAR} Golf Outing.`,
-    isDisabled: (products: Array<Product>) => products.findIndex(p => p.id === 'donation') !== -1,
+    isDisabled: () => products.findIndex(p => p.id === 'donation') !== -1,
     priceQuantity: 1,
     price: 50
   },

@@ -20,7 +20,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
       // Retrieve the line items for the given Checkout Session
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
       const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent as string);
-      let itemsPurchased: string[] = [];
+      const itemsPurchased: string[] = [];
       let donationAmount: number | undefined;
       let ccFeeAmount: number | undefined;
       let sponsorIncome: number | undefined;
@@ -48,7 +48,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
           }
       }
 
-      let insertedGolfers: InsertedGolfer[] = [];
+      const insertedGolfers: InsertedGolfer[] = [];
       // Insert into Golfers Airtable if necessary
       if (golferMetadata.length !== 0) {
         let golfTeamNumber = await getMaxTeamNumber();

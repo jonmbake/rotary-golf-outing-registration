@@ -29,7 +29,7 @@ export default function Selections ({ selectedProducts, removeProductSelection }
           </span>
         </h4>
           <ul className="list-group">
-          {selections.map((s, i) => {
+          {selections.map((s) => {
             return (
               <li key={s.product.displayName} className="list-group-item d-flex justify-content-between lh-sm">
                 <div>

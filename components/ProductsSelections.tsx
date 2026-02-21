@@ -44,7 +44,7 @@ export default function ProductsSelections() {
     if (coverFeesSelection != null) {
       setIsSubmitting(true);
       if (selectedProducts.findIndex(p => p.id.startsWith('golf')) === -1) {
-        formRef.current && formRef.current.submit();
+        if (formRef.current) formRef.current.submit();
       } else {
         router.push(`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/checkout?cover_cc_fees=${coverFeesSelection}`);
       }

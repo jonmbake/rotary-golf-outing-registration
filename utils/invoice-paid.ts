@@ -17,7 +17,7 @@ async function handleInvoicePaid(invoice: Stripe.Invoice, eventId?: string): Pro
         return;
       }
 
-      let itemsPurchased: string[] = [];
+      const itemsPurchased: string[] = [];
       let donationAmount: number | undefined;
       let ccFeeAmount: number | undefined;
       let sponsorIncome: number | undefined;
@@ -53,7 +53,7 @@ async function handleInvoicePaid(invoice: Stripe.Invoice, eventId?: string): Pro
           }
       }
 
-      let insertedGolfers: InsertedGolfer[] = [];
+      const insertedGolfers: InsertedGolfer[] = [];
       // Insert into Golfers Airtable if necessary
       if (golferMetadata.length !== 0) {
         let golfTeamNumber = await getMaxTeamNumber();
