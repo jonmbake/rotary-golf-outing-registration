@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { NextApiRequest, NextApiResponse } from 'next';
 import handleCheckoutSessionCompleted from '../../utils/checkout-session-completed';
+import handleInvoicePaid from '../../utils/invoice-paid';
 import { Readable } from 'stream';
 import { validateEnv } from '@/utils/env';
 
@@ -51,6 +52,16 @@ export default async function handler(
       await handleCheckoutSessionCompleted(session, event.id);
     } catch (error) {
       console.error('Error handling checkout session completed:', error);
+      res.status(500);
+      return;
+    }
+  } else if (event.type === 'invoice.paid') {
+    const invoice = event.data.object as Stripe.Invoice;
+
+    try {
+      await handleInvoicePaid(invoice, event.id);
+    } catch (error) {
+      console.error('Error handling invoice paid:', error);
       res.status(500);
       return;
     }

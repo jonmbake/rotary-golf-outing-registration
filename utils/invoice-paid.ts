@@ -9,7 +9,7 @@ interface InsertedGolfer {
   id: string;
 }
 
-async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, eventId?: string): Promise<void> {
+async function handleInvoicePaid(invoice: Stripe.Invoice, eventId?: string): Promise<void> {
   try {
       // Check if this event has already been processed (idempotency)
       if (eventId && await isEventProcessed(eventId)) {
@@ -17,25 +17,30 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
         return;
       }
 
-      // Retrieve the line items for the given Checkout Session
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
-      const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent as string);
       let itemsPurchased: string[] = [];
       let donationAmount: number | undefined;
       let ccFeeAmount: number | undefined;
       let sponsorIncome: number | undefined;
       let golferMetadata: GolferMetadata[] = [];
 
-      // Process each line item and prepare data for Airtable
-      for (const item of lineItems.data) {
-          const product = await stripe.products.retrieve(item.price?.product as string);
+      // Process each line item from the invoice
+      for (const item of invoice.lines.data) {
+          const productId = item.pricing?.price_details?.product;
+          if (!productId) continue;
+          const product = await stripe.products.retrieve(productId);
 
           if (product.name.includes("Golfer Registration")) {
-              golferMetadata = extractGolferMetadata(paymentIntent.metadata);
-              const golferCount = golferMetadata.length;
+              // Retrieve golfer metadata from payment intent if available
+              const invoicePayments = await stripe.invoicePayments.list({ invoice: invoice.id, limit: 1 });
+              const payment = invoicePayments.data[0]?.payment;
+              if (payment?.payment_intent && typeof payment.payment_intent === 'string') {
+                const paymentIntent = await stripe.paymentIntents.retrieve(payment.payment_intent);
+                golferMetadata = extractGolferMetadata(paymentIntent.metadata);
+              }
+              const golferCount = golferMetadata.length || (item.quantity || 1);
               itemsPurchased.push(`${golferCount} Golfer${golferCount > 1 ? 's' : ''}`);
           } else if (product.name.includes("Donation")) {
-              donationAmount = (item.amount_total || 0) / 100;
+              donationAmount = (item.amount || 0) / 100;
               itemsPurchased.push("Donation");
           } else if (product.name.includes("Hole")) {
               itemsPurchased.push("Hole Sponsor");
@@ -44,7 +49,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
             itemsPurchased.push("Dinner/Lunch");
           } else if (product.name.includes("Processing Fees")) {
             itemsPurchased.push("Credit Card Fees");
-            ccFeeAmount = (item.amount_total || 0) / 100;
+            ccFeeAmount = (item.amount || 0) / 100;
           }
       }
 
@@ -65,21 +70,20 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
         }
       }
 
-      const paymentDate = new Date(session.created * 1000).toISOString().substring(0,10);
+      const paymentDate = new Date(invoice.created * 1000).toISOString().substring(0,10);
       // Insert into Receipts Airtable
       await base('Receipts').create({
-          'Payer': session.customer_details?.name || '',
-          'Invoiced Amount': (session.amount_total || 0) / 100,
+          'Payer': invoice.customer_name || '',
+          'Invoiced Amount': (invoice.amount_paid || 0) / 100,
           'Items Purchased': itemsPurchased,
           'Donation Amount': donationAmount,
           'Credit Card Fees Paid': ccFeeAmount,
           'Sponsor Income': sponsorIncome,
           'Golfers': insertedGolfers.map(g => g.id),
-          'Payer Email': session.customer_details?.email || '',
-          'Payer Phone': session.customer_details?.phone || '',
+          'Payer Email': invoice.customer_email || '',
           'Payment Date': paymentDate,
-          'Receipt Type': 'Online - Credit Card',
-          'Stripe Payment Amount': (session.amount_total || 0) / 100
+          'Receipt Type': 'Online - Invoice',
+          'Stripe Payment Amount': (invoice.amount_paid || 0) / 100
       });
 
       // Mark event as processed for idempotency
@@ -88,9 +92,9 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session, 
       }
 
   } catch (error) {
-      console.error('Error processing checkout session:', error);
+      console.error('Error processing invoice paid:', error);
       throw error;
   }
 }
 
-export default handleCheckoutSessionCompleted;
+export default handleInvoicePaid;
