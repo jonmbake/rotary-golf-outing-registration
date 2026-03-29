@@ -29,7 +29,7 @@ const requestBodySchema = Joi.object({
 
 export function buildLineItems(reqBody: Record<string, unknown>): Array<Stripe.Checkout.SessionCreateParams.LineItem> {
   const lineItems: Array<Stripe.Checkout.SessionCreateParams.LineItem> = [];
-  const products = JSON.parse(reqBody.products);
+  const products = JSON.parse(reqBody.products as string);
 
   let lineItemAmount = 0;
   for (const [key, value] of Object.entries<number>(products)) {
