@@ -73,7 +73,7 @@ async function handleInvoicePaid(invoice: Stripe.Invoice, eventId?: string): Pro
       const paymentDate = new Date(invoice.created * 1000).toISOString().substring(0,10);
       const amountPaid = (invoice.amount_paid || 0) / 100;
       // Stripe invoicing fee: 0.4% per paid invoice, capped at $2.00
-      const stripeInvoicingFee = Math.min(amountPaid * 0.004, 2.00);
+      const stripeInvoicingFee = amountPaid * 0.004;
       // Insert into Receipts Airtable
       await base('Receipts').create({
           'Payer': invoice.customer_name || '',
