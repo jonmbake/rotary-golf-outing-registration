@@ -71,10 +71,13 @@ async function handleInvoicePaid(invoice: Stripe.Invoice, eventId?: string): Pro
       }
 
       const paymentDate = new Date(invoice.created * 1000).toISOString().substring(0,10);
+      const amountPaid = (invoice.amount_paid || 0) / 100;
+      // Stripe invoicing fee: 0.4% per paid invoice, capped at $2.00
+      const stripeInvoicingFee = Math.min(amountPaid * 0.004, 2.00);
       // Insert into Receipts Airtable
       await base('Receipts').create({
           'Payer': invoice.customer_name || '',
-          'Invoiced Amount': (invoice.amount_paid || 0) / 100,
+          'Invoiced Amount': amountPaid,
           'Items Purchased': itemsPurchased,
           'Donation Amount': donationAmount,
           'Credit Card Fees Paid': ccFeeAmount,
@@ -82,8 +85,9 @@ async function handleInvoicePaid(invoice: Stripe.Invoice, eventId?: string): Pro
           'Golfers': insertedGolfers.map(g => g.id),
           'Payer Email': invoice.customer_email || '',
           'Payment Date': paymentDate,
-          'Receipt Type': 'Online - Invoice',
-          'Stripe Payment Amount': (invoice.amount_paid || 0) / 100
+          'Receipt Type': 'Online - Credit Card',
+          'Stripe Payment Amount': amountPaid,
+          'Stripe Other Fees (Invoicing, etc.)': stripeInvoicingFee
       });
 
       // Mark event as processed for idempotency
